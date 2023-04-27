@@ -1,19 +1,24 @@
+let getTotalpage;
 let eventData = [];
+let eventArray = [];
+let checkarray =[];
+let sumarray=[];
 const countPerPage = 13; // 페이지당 데이터 건수
 const showPageCnt = 5; // 화면에 보일 페이지 번호 개수
 
-$(function () {
-  const eventUrl = "http://192.168.0.51:8080/zm/api/events/index.json?user=admin&pass=hijacking1";
-  axios.get(eventUrl).then(res => {
-    eventData = res.data.events;
-
-    // 데이터를 한 번에 가져와서 페이지별로 화면에 출력합니다.
-    setTable(1);
-    setPaging(1);
-  }).catch(err => console.error(err)).then(() => {
-    // finally
-  });
-  $(document).on('click', 'ul.pagination>li.page-item', function () {
+chk()
+async function chk(){
+  const response =  await axios.get('http://192.168.0.51:8080/zm/api/events/index.json?user=admin&pass=hijacking1');
+  console.log(response.data.pagination.pageCount)
+  for(let i=1; i<=response.data.pagination.pageCount; i++){
+    const pageResponse = await axios.get(`http://192.168.0.51:8080/zm/api/events.json?page=${i}&user=admin&pass=hijacking1`)
+    checkarray.push(pageResponse.data.events);
+  }
+  eventData = (checkarray.flat()).reverse();
+   // 데이터를 한 번에 가져와서 페이지별로 화면에 출력합니다.
+   setTable(1);
+   setPaging(1);
+   $(document).on('click', 'ul.pagination>li.page-item', function () {
     if (!$(this).hasClass('active')) {
       $(this).parent().find('li.active').removeClass('active');
       $(this).addClass('active');
@@ -28,19 +33,21 @@ $(function () {
       setPaging(1);
     } else if (id == 'prev_page') {
       let arrPages = [];
-      $('ul.pagination>li.page-item').each(function (idx, item) {
+      $('ul.pagination>li.pages').each(function (idx, item) {
         arrPages.push(Number($(this).text()));
+        console.log(idx,item)
       });
-      const prevPage = _.min(arrPages) - showPageCnt;
+
+       const prevPage = Math.min(...arrPages) - showPageCnt;
       setTable(prevPage);
-      setPaging(prevPage);
+      setPaging(prevPage);  
     } else if (id == 'next_page') {
       let arrPages = [];
-      $('ul.pagination>li.page-item').each(function (idx, item) {
+      $('ul.pagination>li.pages').each(function (idx, item) {
         arrPages.push(Number($(this).text()));
       });
-      const nextPage = _.max(arrPages) + 1;
-      setTable(nextPage);
+       const nextPage =Math.max(...arrPages) + 1;
+      setTable(nextPage); 
       setPaging(nextPage);
     } else if (id == 'last_page') {
       const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
@@ -48,17 +55,18 @@ $(function () {
       setPaging(lastPage);
     }
   });
-});
+}
+
+
 
 /**
  * 테이블에 데이터를 세팅합니다.
- */
+*/
 function setTable(pageNum) {
   $('#table_body').empty();
-
+  
   // filtering data
   const filteredData = eventData.slice((pageNum - 1) * countPerPage, pageNum * countPerPage);
-
   // let fileName = 
 
   let sTbodyHtml = '';
@@ -86,10 +94,12 @@ function setTable(pageNum) {
       titles.innerText = item.children[1].textContent;
       let eventId = item.getAttribute('data-value');
       var imgSrc = document.createElement('img');
+      $('#recording').empty();
       imgSrc.setAttribute('src', `http://192.168.0.51:8080/zm/cgi-bin/nph-zms?mode=jpeg&frame=1&replay=none&source=event&event=${eventId}&connkey=${eventId}&user=admin&pass=hijacking1`);
       $('#recording').append(imgSrc);
       $('#videoModal').modal('show');
     });
+
   });
 }
 
@@ -100,7 +110,7 @@ function setTable(pageNum) {
 function setPaging(pageNum) {
   const currentPage = pageNum;
   const totalPage = Math.floor(eventData.length / countPerPage) + (eventData.length % countPerPage == 0 ? 0 : 1);
-  //console.log(currentPage, totalPage);
+  console.log(currentPage, totalPage, showPageCnt);
 
   showAllIcon();
   if (currentPage <= showPageCnt) {
@@ -116,7 +126,8 @@ function setPaging(pageNum) {
   for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
     sPagesHtml += '<li class="page-item pages ' + (start == currentPage ? 'active' : '') + '">' + '<a class="page-link">' + start + '</a></li>';
   }
-  $('ul.pagination').html(sPagesHtml);
+  $('li.page-item.pages').empty();
+  $('#prev_page').after(sPagesHtml);
 }
 function showAllIcon() {
   $('#first_page').show();
