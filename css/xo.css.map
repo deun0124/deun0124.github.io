@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/scss/xo.scss","xo.css"],"names":[],"mappings":"AAAA;EAAe,iBAAA;ACEf","file":"xo.css","sourcesContent":[".container-max{max-width: 1500px;}\r\n\r\n",".container-max {\n  max-width: 1500px;\n}\n\n/*# sourceMappingURL=xo.css.map */\n"]}

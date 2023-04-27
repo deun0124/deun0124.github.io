@@ -1,0 +1,300 @@
+<!DOCTYPE html><!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v4.2.2
+* @link https://coreui.io
+* Copyright (c) 2022 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+--><!-- Breadcrumb-->
+<html lang="en">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>AI신호등 관리 시스템</title>
+    <link rel="shortcut icon" type="image/x-icon" href="http://akz.dothome.co.kr/pavicon1.ico">
+    <!-- <link rel="manifest" href="assets/favicon/manifest.json"> -->
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="vendors/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="css/vendors/simplebar.css">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- We use those styles to show code examples, you should remove them in your application.-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism.css">
+    <link href="css/examples.css" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
+    <!-- xo CSS -->
+    <link rel="stylesheet" href="css/xo.css">
+    <!-- 카카오 지도 -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js" integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx" crossorigin="anonymous"></script>
+    <script>
+      Kakao.init('d12544957eb62957e7ab14abe36c8117'); // 사용하려는 앱의 JavaScript 키 입력
+    </script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      // Shared ID
+      gtag('config', 'UA-118965717-3');
+      // Bootstrap ID
+      gtag('config', 'UA-118965717-5');
+    </script>
+    <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- 실시간 CCTV Modal -->
+    <div class="modal modal-lg fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="myModalLabel">Modal title</h1>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs" id="monitor-list">
+            </ul>
+            <div class="container mt-3" id="monitoring">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+      <div class="sidebar-brand d-none d-md-flex">
+        <div class="sidebar-brand-full" width="118" height="46">
+          <img src="../assets/img/logo.png" alt="" style="width:105px;">
+        </div>
+      </div>
+      <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+        <li class="nav-item"><a class="nav-link" href="index.html">
+            <svg class="nav-icon">
+              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
+            </svg> Dashboard<span class="badge badge-sm bg-info ms-auto">NEW</span></a></li>
+        <li class="nav-title">신호등</li>
+        <li class="nav-item"><a class="nav-link" href="blackbox.html">
+            <svg class="nav-icon">
+              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-camera"></use>
+            </svg>블랙박스</a></li>
+        <li class="nav-item"><a class="nav-link" href="typography.html">
+            <svg class="nav-icon">
+              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-car-alt"></use>
+            </svg>차량</a></li>
+        <li class="nav-divider"></li>
+      </ul>
+      <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+    </div>
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+      <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+          <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+            <svg class="icon icon-lg">
+              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
+            </svg>
+          </button>
+          <ul class="header-nav d-none d-md-flex">
+            <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+          </ul>
+          <ul class="header-nav ms-auto">
+          </ul>
+          <ul class="header-nav ms-3">
+            <svg class="icon icon-lg">
+              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+            </svg>
+          </ul>
+
+        </div>
+        <div class="header-divider"></div>
+        <div class="container-fluid">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb my-0 ms-2">
+              <li class="breadcrumb-item">
+                <!-- if breadcrumb is single--><span>Home</span>
+              </li>
+              <li class="breadcrumb-item active"><span>Dashboard</span></li>
+            </ol>
+          </nav>
+        </div>
+      </header>
+      <div class="body flex-grow-1 px-3">
+        <div class="container-lg container-max">
+          <div class="row row-cols-2">
+            <!-- 신호등 현황 -->
+            <div class="col">
+              <div class="card mb-4">
+                <div class="card-header"><strong>신호등 현황</strong></div>
+                <div class="card-body">
+                  <div id="map" style="width:100%;height:400px;"></div>
+                  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d12544957eb62957e7ab14abe36c8117"></script>
+                  <script>
+
+
+                  </script>
+                </div>
+              </div>
+            </div>
+            <!-- 생활정보 알림 -->
+            <div class="col">
+              <div class="card mb-4">
+                <div class="card-header"><strong>생활정보 알림</strong>[<span class="small ms-1 current"></span>]</div>
+                <div class="card-body" style="height: 432px;">
+                  <div class="row">
+                    <div class="col text-center" id="temperature">
+                      <!-- <img class="temperature-img" src="../assets/img/weather/115749_weather_cloud_icon.svg" alt="rainy" width ="80"> -->
+                      <div class="m-3"><strong class="weather-info"></strong></div>
+                    </div>
+                    <div class="col text-center">
+                      <img src="../assets/img/weather/humidity.png" alt="rainy" width="80">
+                      <div class="m-3"><strong class="weather-info">34%</strong></div>
+                    </div>
+                    <div class="col text-center">
+                      <img src="../assets/img/weather/wind.png" alt="rainy" width="80">
+                      <div class="m-3"><strong class="weather-info">3.7m/s</strong></div>
+                    </div>
+                    <div class="col text-center">
+                      <img src="../assets/img/weather/idea.png" alt="rainy" width="80">
+                      <div class="m-3"><strong class="weather-info">7000Lux</strong></div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="c-chart-wrapper mt-3">
+                      <!-- 미세먼지 데이터 -->
+                      <canvas class="chart" id="card-chart3" height="122"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="card mb-4">
+                <div class="card-header"><strong>교통량 측정</strong>[<span class="small ms-1 current">나주시 빛가람동</span>]</div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h4 class="card-title mb-0"><strong>Traffic</strong></h4>
+                      <div class="small text-medium-emphasis date-options">January - July 2023</div>
+                    </div>
+                    <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                      <ul class="graph_nav btn-group btn-group-toggle mx-3">
+                        <li class="graph_li btn btn-outline-secondary" id="option_day">Day</li>
+                        <li class="graph_li btn btn-outline-secondary" id="option_month">Month</li>
+                        <li class="graph_li btn btn-outline-secondary active" id="option_year">Year</li>
+                      </ul>
+
+                      <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
+                        <input class="btn-check" id="option1" type="radio" name="options" value="day" autocomplete="off">
+                        <label class="btn btn-outline-secondary " for="option1"> Day</label>
+                        <input class="btn-check" id="option2" type="radio" name="options" value="month" autocomplete="off" >
+                        <label class="btn btn-outline-secondary" for="option2"> Month</label>
+                        <input class="btn-check" id="option3" type="radio" name="options" value="year" autocomplete="off">
+                        <label class="btn btn-outline-secondary"> Year</label>
+                        <input class="btn-check" id="option4" type="radio" name="options"  value="year" autocomplete="off" checked>
+                        <label class="btn btn-outline-secondary " for="option4"> Year</label>
+                      </div> -->
+                      <script>
+
+                      </script>
+                    </div>
+                  </div>
+                  <div class="row ">
+                    <div class="c-chart-wrapper" style="height:256px;margin-top:40px;">
+                      <canvas class="chart" id="main-chart" height="256"></canvas>
+                    </div>
+                    <div class="row mt-3">
+                      <div class="col-6">
+                        <div class="border-start border-start-4 border-start-warning px-3 mb-3"><small class="text-medium-emphasis">보행자</small>
+                          <div class="fs-5 fw-semibold">78.623</div>
+                        </div>
+                      </div>
+                      <!-- /.col-->
+                      <div class="col-6">
+                        <div class="border-start border-start-4 border-start-success px-3 mb-3"><small class="text-medium-emphasis">차량</small>
+                          <div class="fs-5 fw-semibold">49.123</div>
+                        </div>
+                      </div>
+                      <!-- /.col-->
+                    </div>
+                    <!-- /.row-->
+                  </div>
+                  <hr class="mt-0">
+                  <div class="row">
+                    <div class="col">
+                      <div class="mt-3 text-center">
+                        <h4 class="card-title mb-0"><strong>차량 진출입량</strong></h4>
+                        <div class="small text-medium-emphasis  date-options">January - July 2023</div>
+                      </div>
+                      <div class="c-chart-wrapper d-flex align-items-center" style="height: 500px;">
+                        <canvas id="card-chart4"></canvas>
+                      </div>
+                    </div>
+
+                    <div class="col">
+                      <div class="mt-3  text-center">
+                        <h4 class="card-title mb-0"><strong>차량 종류</strong></h4>
+                        <div class="small text-medium-emphasis  date-options">January - July 2023</div>
+                      </div>
+                      <div class="c-chart-wrapper  d-flex justify-content-center">
+                        <canvas id="card-chart2" width="500" height="500"></canvas>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr class="mt-0">
+                  <div class="table-responsive">
+                    <table class="table border mb-0">
+                      <thead class="table-light fw-semibold">
+                        <tr class="align-middle">
+                          <th class="text-center">분류</th>
+                          <th>이벤트 제목</th>
+                          <th class="text-center">날짜 </th>
+                          <th class="text-center">시간</th>
+                          <th class="text-center">파일크기</th>
+                        </tr>
+                      </thead>
+                      <tbody id="record_table">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+
+
+          </div>
+
+        </div>
+      </div>
+      <footer class="footer">
+        <div><a href="xoco.kr">엑스오</a><a href="xoco.kr">Company</a> ©2023 creativeLabs.</div>
+        <div class="ms-auto">Powered by&nbsp;<a href="xoco.kr">XO Components</a></div>
+      </footer>
+    </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="vendors/simplebar/js/simplebar.min.js"></script>
+    <!-- Plugins and scripts required by this view-->
+    <script src="vendors/chart.js/js/chart.min.js"></script>
+    <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
+    <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
+    <script src="js/main.js?version=14"></script>
+    <script src="js/blackbox.js"></script>
+
+    <script>
+    </script>
+
+  </body>
+</html>
