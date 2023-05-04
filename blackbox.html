@@ -11,6 +11,7 @@
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
       <title>AI신호등 관리 시스템</title>
       <!-- <link rel="manifest" href="assets/favicon/manifest.json"> -->
       <meta name="msapplication-TileColor" content="#ffffff">
@@ -97,8 +98,6 @@
             </button>
             <ul class="header-nav d-none d-md-flex">
               <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
-              <!--   <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
-              <li class="nav-item"><a class="nav-link" href="#">Settings</a></li> -->
             </ul>
             <ul class="header-nav ms-auto">
             </ul>
@@ -124,6 +123,20 @@
           <div class="container-lg container-max">
             <div class="card mb-4">
               <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-sm-2">
+                    <select name="" id="" class="form-select form-select-sm">
+                      <option selected>분류</option>
+                      <option value="1">Event</option>
+                      <option value="2">Lound</option>
+                      <option value="3">Vibration</option>
+                    </select>
+                  </div>
+                    <label for="inputDate" class="col-sm-1 col-form-label text-end">날짜</label>
+                    <div class="col-sm-2">
+                      <input type="text" class="form-control" id="inputDate">
+                    </div>
+                </div>
                 <div class="table-responsive">
                   <table class="table border mb-0 table-hover" >
                     <thead class="table-light fw-semibold">
@@ -144,13 +157,13 @@
               <div class="card-body mx-auto">
                 <nav aria-label="Page navigation example">
                    <ul class="pagination">
-                    <li class="page-item move" id="first_page"><a class="page-link">《</a></li>
-                    <li class="page-item move"  id="prev_page"><a class="page-link">Previous</a></li>
+                    <li class="page-item move" id="first_page"><a class="page-link">&#171;</a></li>
+                    <li class="page-item move"  id="prev_page"><a class="page-link">&#8249;</a></li>
                    <!--  <li class="page-item pages active" aria-current="page"><a class="page-link" href="#">1</a></li>
                     <li class="page-item  pages "><a class="page-link" href="#">2</a></li>
                     <li class="page-item  pages "><a class="page-link" href="#">3</a></li> -->
-                    <li class="page-item move"  id="next_page"><a class="page-link">Next</a></li>
-                    <li class="page-item move"  id="last_page"><a class="page-link">》</a></li>
+                    <li class="page-item move"  id="next_page"><a class="page-link">&#8250;</a></li>
+                    <li class="page-item move"  id="last_page"><a class="page-link">&#187;</a></li>
                   </ul> 
                 </nav>
               </div> 
